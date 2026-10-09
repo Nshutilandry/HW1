@@ -8,8 +8,12 @@ set(CMAKE_CXX_EXTENSIONS OFF)
 # Warnings and runtime checks for every target in this project.
 # AddressSanitizer reports out-of-bounds access and memory leaks;
 # UndefinedBehaviorSanitizer reports signed overflow and similar.
-add_compile_options(-Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer)
-add_link_options(-fsanitize=address,undefined)
+if(CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
+    add_compile_options(-Wall -Wextra -Wpedantic -fsanitize=address,undefined -fno-omit-frame-pointer)
+    add_link_options(-fsanitize=address,undefined)
+elseif(MSVC)
+    add_compile_options(/W4)
+endif()
 
 # Everything except main() lives in a library so the tests can link to it.
 # Add each new .cpp file to this list.
